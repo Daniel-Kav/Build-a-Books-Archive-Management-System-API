@@ -1,4 +1,5 @@
 import { IsString, MinLength, MaxLength, IsOptional, MaxLength as MaxLengthBio, IsDateString, ValidateIf, IsBoolean } from 'class-validator';
+import { IsNotInFuture } from '../../common/validators/is-not-in-future.validator';
 
 export class CreateAuthorDto {
   @IsString()
@@ -13,8 +14,9 @@ export class CreateAuthorDto {
 
   @IsOptional()
   @IsDateString()
+  @IsNotInFuture({ message: 'birthDate must not be in the future' })
   // Custom validator needed for 'not in the future'
-  birthDate?: Date;
+  birthDate?: string;
 
   @IsOptional()
   @IsBoolean()

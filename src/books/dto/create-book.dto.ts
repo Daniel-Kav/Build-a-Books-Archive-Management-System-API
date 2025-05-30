@@ -1,5 +1,6 @@
-import { IsString, MinLength, MaxLength, IsInt, Min, Max, IsOptional, IsBoolean, IsUUID, IsArray } from 'class-validator';
-import { Type } from 'class-transformer'; // For type conversion
+import { IsString, MinLength, MaxLength, IsInt, IsOptional, IsBoolean, IsUUID, IsArray } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsYearInRange } from '../../common/validators/is-year-in-range.validator';
 
 export class CreateBookDto {
   @IsString()
@@ -13,9 +14,8 @@ export class CreateBookDto {
   description: string;
 
   @IsInt()
-  @Min(1000)
-  @Max(new Date().getFullYear()) // Current year
-  @Type(() => Number) // Ensures transformation from string if needed
+  @IsYearInRange({ message: 'publicationYear must be between 1000 and the current year' })
+  @Type(() => Number)
   publicationYear: number;
 
   @IsOptional()
@@ -27,6 +27,6 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsArray()
-  @IsUUID('4', { each: true }) // Validate each element in the array as a UUID v4
+  @IsUUID('4', { each: true })
   categoryIds?: string[];
 }
