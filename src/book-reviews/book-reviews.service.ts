@@ -18,24 +18,57 @@ export class BookReviewsService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createBookReviewDto: CreateBookReviewDto) {
-    return 'This action adds a new bookReview';
+  async create(createBookReviewDto: CreateBookReviewDto) {
+    const { bookId, userId, ...reviewData } = createBookReviewDto as any;
+    const book = await this.booksRepository.findOneBy({ id: bookId });
+    if (!book) {
+      throw new NotFoundException(`Book with ID "${bookId}" not found.`);
+    }
+    if (!book.isAvailable) {
+      throw new BadRequestException(`Book with ID "${bookId}" is not available for review.`);
+    }
+    const user = await this.usersRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException(`User with ID "${userId}" not found.`);
+    }
+    if (!user.isActive) {
+      throw new BadRequestException(`User with ID "${userId}" is not active and cannot post reviews.`);
+    }
+    const existingReview = await this.bookReviewsRepository.findOne({ where: { book: { id: bookId }, user: { id: userId } } });
+    if (existingReview) {
+      throw new ConflictException('You have already reviewed this book.');
+    }
+    const review = this.bookReviewsRepository.create({ ...reviewData, book, user });
+    return this.bookReviewsRepository.save(review);
   }
 
-  findAll() {
-    return `This action returns all bookReviews`;
+  async findAll() {
+    return this.bookReviewsRepository.find({ relations: ['book', 'user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bookReview`;
+  async findOne(id: string) {
+    const review = await this.bookReviewsRepository.findOne({ where: { id }, relations: ['book', 'user'] });
+    if (!review) {
+      throw new NotFoundException(`BookReview with ID "${id}" not found.`);
+    }
+    return review;
   }
 
-  update(id: number, updateBookReviewDto: UpdateBookReviewDto) {
-    return `This action updates a #${id} bookReview`;
+  async update(id: string, updateBookReviewDto: UpdateBookReviewDto) {
+    const review = await this.bookReviewsRepository.findOne({ where: { id }, relations: ['book', 'user'] });
+    if (!review) {
+      throw new NotFoundException(`BookReview with ID "${id}" not found.`);
+    }
+    Object.assign(review, updateBookReviewDto);
+    return this.bookReviewsRepository.save(review);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bookReview`;
+  async remove(id: string) {
+    const result = await this.bookReviewsRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`BookReview with ID "${id}" not found.`);
+    }
+    return { deleted: true };
   }
 
   async addReview(bookId: string, userId: string, createBookReviewDto: CreateBookReviewDto): Promise<BookReview> {
@@ -55,13 +88,11 @@ export class BookReviewsService {
         throw new BadRequestException(`User with ID "${userId}" is not active and cannot post reviews.`);
     }
 
-
     // Check if this user has already reviewed this book (optional business rule)
     const existingReview = await this.bookReviewsRepository.findOne({ where: { book: { id: bookId }, user: { id: userId } } });
     if (existingReview) {
         throw new ConflictException('You have already reviewed this book.');
     }
-
 
     const review = this.bookReviewsRepository.create({
       ...createBookReviewDto,

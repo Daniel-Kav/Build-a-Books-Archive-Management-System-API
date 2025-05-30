@@ -26,7 +26,10 @@ PUT {{baseUrl}}/users/1
 Content-Type: application/json
 
 {
-  "name": "Updated Name"
+  "name": "Updated Name",
+  "email": "updated@example.com",
+  "password": "NewPassword123!",
+  "isActive": false
 }
 
 ### Delete a user
@@ -58,7 +61,10 @@ PATCH {{baseUrl}}/profiles/1
 Content-Type: application/json
 
 {
-  "bio": "Updated bio."
+  "bio": "Updated bio.",
+  "avatar": "avatar2.png",
+  "dateOfBirth": "1991-01-01",
+  "location": "London"
 }
 
 ### Delete a profile
@@ -81,16 +87,18 @@ Content-Type: application/json
 {
   "name": "Jane Austen",
   "bio": "Renowned English novelist.",
-  "birthDate": "2025-05-30T08:38:21.614Z",
+  "birthDate": "1775-12-16",
   "isActive": true
 }
 
 ### Update an author
-PUT {{baseUrl}}/authors/1
+PUT {{baseUrl}}/authors/be6e8ead-a659-4ad3-b521-7d12e28732b2
 Content-Type: application/json
 
 {
-  "bio": "Updated bio."
+  "bio": "Updated bio.",
+  "birthDate": "1980-01-01",
+  "isActive": false
 }
 
 ### Delete an author
@@ -117,8 +125,8 @@ Content-Type: application/json
   "title": "Pride and Prejudice",
   "description": "A romantic novel.",
   "publicationYear": 1813,
-  "authorId": "author-uuid",
-  "categoryIds": ["category-uuid"],
+  "authorId": "2ca0dc83-5351-4a97-95f1-25bf5af5a454",
+  "categoryIds": ["5946610a-a9c8-4287-a0a2-63811004a3a2"],
   "isAvailable": true
 }
 
@@ -127,7 +135,12 @@ PUT {{baseUrl}}/books/1
 Content-Type: application/json
 
 {
-  "description": "Updated description."
+  "title": "Updated Title",
+  "description": "Updated description.",
+  "publicationYear": 2000,
+  "authorId": "author-uuid",
+  "categoryIds": ["5946610a-a9c8-4287-a0a2-63811004a3a2"],
+  "isAvailable": false
 }
 
 ### Delete a book
@@ -144,7 +157,7 @@ GET {{baseUrl}}/books/search?title=pride&authorName=austen&categoryName=classic
 GET {{baseUrl}}/categories
 
 ### Get a category by ID
-GET {{baseUrl}}/categories/1
+GET {{baseUrl}}/categories/5946610a-a9c8-4287-a0a2-63811004a3a2
 
 ### Create a category
 POST {{baseUrl}}/categories
@@ -156,10 +169,11 @@ Content-Type: application/json
 }
 
 ### Update a category
-PUT {{baseUrl}}/categories/1
+PUT {{baseUrl}}/categories/5946610a-a9c8-4287-a0a2-63811004a3a2
 Content-Type: application/json
 
 {
+  "name": "Updated Category Name",
   "description": "Updated description."
 }
 
@@ -167,7 +181,7 @@ Content-Type: application/json
 DELETE {{baseUrl}}/categories/1
 
 ### Get books in a category
-GET {{baseUrl}}/categories/1/books
+GET {{baseUrl}}/categories/5946610a-a9c8-4287-a0a2-63811004a3a2/books
 
 #########################################################################
                 BOOK REVIEW ENDPOINTS
