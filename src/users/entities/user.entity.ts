@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { BookReview } from 'src/book-reviews/entities/book-review.entity';
+import { Profile } from 'src/profiles/entities/profile.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -22,4 +24,10 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+  @OneToOne(() => Profile, profile => profile.user, { cascade: true }) // cascade for easier creation/deletion
+  @JoinColumn() // User entity will have profileId column
+  profile: Profile;
+
+  @OneToMany(() => BookReview, bookReview => bookReview.user)
+  reviews: BookReview[];
 }

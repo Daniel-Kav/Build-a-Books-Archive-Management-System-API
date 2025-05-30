@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 
 @Entity('profiles')
 export class Profile {
@@ -16,4 +17,8 @@ export class Profile {
 
   @Column({ nullable: true })
   location: string;
+
+  @OneToOne(() => User, user => user.profile)
+  // No @JoinColumn() here, it's on the owning side (User)
+  user: User;
 }
