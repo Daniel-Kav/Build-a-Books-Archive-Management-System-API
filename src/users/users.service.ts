@@ -4,9 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcryptjs'; // npm install bcrypt @types/bcrypt
-import { Profile } from '../profiles/entities/profile.entity'; // For profile creation
-import { CreateProfileDto } from '../profiles/dto/create-profile.dto'; // If handling profile creation with user
+import * as bcrypt from 'bcryptjs'; 
+import { Profile } from '../profiles/entities/profile.entity'; 
 
 @Injectable()
 export class UsersService {

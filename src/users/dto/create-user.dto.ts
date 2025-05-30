@@ -1,16 +1,15 @@
-import { IsString, MinLength, MaxLength, IsEmail, Matches, IsOptional, IsBoolean, IsAlphanumeric } from 'class-validator';
-
-const nameRegex = /^[a-zA-Z0-9 ]*$/; // Alphanumeric with spaces
+import { IsString, MinLength, MaxLength, IsEmail, Matches, IsOptional, IsBoolean } from 'class-validator';
+import { IsAlphanumericWithSpaces } from '../../common/validators/is-alphanumeric-with-spaces.validator';
 
 export class CreateUserDto {
   @IsString()
   @MinLength(2)
   @MaxLength(50)
-  @Matches(nameRegex, { message: 'Name must be alphanumeric with spaces' }) // Custom regex or IsAlphanumeric if spaces not allowed by it
+  @IsAlphanumericWithSpaces({ message: 'Name must be alphanumeric with spaces' })
   name: string;
 
   @IsEmail({}, { message: 'Please provide a valid email address' })
-  // Add @IsUnique or similar custom validator later if needed for 'unique' email constraint check via DB
+  // Unique email handled at DB/service level
   email: string;
 
   @IsString()
