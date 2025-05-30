@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
@@ -11,9 +11,16 @@ export class CategoriesService {
     private categoriesRepository: Repository<Category>,
   ) {}
 
-  create(createCategoryDto) {
+  async create(createCategoryDto) {
     const category = this.categoriesRepository.create(createCategoryDto);
-    return this.categoriesRepository.save(category);
+    try {
+      return await this.categoriesRepository.save(category);
+    } catch (error) {
+      if (error.code === '23505') { // PostgreSQL unique violation
+        throw new ConflictException('Category name must be unique');
+      }
+      throw error;
+    }
   }
 
   findAll() {
