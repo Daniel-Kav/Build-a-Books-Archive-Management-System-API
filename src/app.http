@@ -1,47 +1,212 @@
 @baseUrl = http://127.0.0.1:5000
+@deployedUrl = https://your-deployed-url.com
 
-# USERS
-GET    {{baseUrl}}/users
-GET    {{baseUrl}}/users/:id
-POST   {{baseUrl}}/users
-PUT    {{baseUrl}}/users/:id
-DELETE {{baseUrl}}/users/:id
+#########################################################################
+                USER ENDPOINTS
+##########################################################################
 
-# PROFILES
-GET    {{baseUrl}}/profiles
-GET    {{baseUrl}}/profiles/:id
-POST   {{baseUrl}}/profiles
-PATCH  {{baseUrl}}/profiles/:id
-DELETE {{baseUrl}}/profiles/:id
+### Get all users
+GET {{baseUrl}}/users
 
-# AUTHORS
-GET    {{baseUrl}}/authors
-GET    {{baseUrl}}/authors/:id
-POST   {{baseUrl}}/authors
-PUT    {{baseUrl}}/authors/:id
-DELETE {{baseUrl}}/authors/:id
-GET    {{baseUrl}}/authors/:id/books
+### Get a user by ID
+GET {{baseUrl}}/users/1
 
-# BOOKS
-GET    {{baseUrl}}/books
-GET    {{baseUrl}}/books/:id
-POST   {{baseUrl}}/books
-PUT    {{baseUrl}}/books/:id
-DELETE {{baseUrl}}/books/:id
-GET    {{baseUrl}}/books/search?title=&authorName=&categoryName=
+### Create a user
+POST {{baseUrl}}/users
+Content-Type: application/json
 
-# CATEGORIES
-GET    {{baseUrl}}/categories
-GET    {{baseUrl}}/categories/:id
-POST   {{baseUrl}}/categories
-PUT    {{baseUrl}}/categories/:id
-DELETE {{baseUrl}}/categories/:id
-GET    {{baseUrl}}/categories/:id/books
+{
+  "name": "Alice Wonderland",
+  "email": "alicee@example.com",
+  "password": "Password123!"
+}
 
-# BOOK REVIEWS
-GET    {{baseUrl}}/book-reviews
-GET    {{baseUrl}}/book-reviews/:id
-POST   {{baseUrl}}/book-reviews
-PATCH  {{baseUrl}}/book-reviews/:id
-DELETE {{baseUrl}}/book-reviews/:id
-POST   {{baseUrl}}/books/:bookId/reviews
+### Update a user
+PUT {{baseUrl}}/users/1
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### Delete a user
+DELETE {{baseUrl}}/users/1
+
+#########################################################################
+                PROFILE ENDPOINTS
+##########################################################################
+
+### Get all profiles
+GET {{baseUrl}}/profiles
+
+### Get a profile by ID
+GET {{baseUrl}}/profiles/1
+
+### Create a profile
+POST {{baseUrl}}/profiles
+Content-Type: application/json
+
+{
+  "bio": "Loves reading thrillers.",
+  "avatar": "avatar1.png",
+  "dateOfBirth": "1990-05-15",
+  "location": "New York"
+}
+
+### Update a profile
+PATCH {{baseUrl}}/profiles/1
+Content-Type: application/json
+
+{
+  "bio": "Updated bio."
+}
+
+### Delete a profile
+DELETE {{baseUrl}}/profiles/1
+
+#########################################################################
+                AUTHOR ENDPOINTS
+##########################################################################
+
+### Get all authors
+GET {{baseUrl}}/authors
+
+### Get an author by ID
+GET {{baseUrl}}/authors/be6e8ead-a659-4ad3-b521-7d12e28732b2
+
+### Create an author
+POST {{baseUrl}}/authors
+Content-Type: application/json
+
+{
+  "name": "Jane Austen",
+  "bio": "Renowned English novelist.",
+  "birthDate": "2025-05-30T08:38:21.614Z",
+  "isActive": true
+}
+
+### Update an author
+PUT {{baseUrl}}/authors/1
+Content-Type: application/json
+
+{
+  "bio": "Updated bio."
+}
+
+### Delete an author
+DELETE {{baseUrl}}/authors/1
+
+### Get books by author
+GET {{baseUrl}}/authors/1/books
+
+#########################################################################
+                BOOK ENDPOINTS
+##########################################################################
+
+### Get all books
+GET {{baseUrl}}/books
+
+### Get a book by ID
+GET {{baseUrl}}/books/1
+
+### Create a book
+POST {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "Pride and Prejudice",
+  "description": "A romantic novel.",
+  "publicationYear": 1813,
+  "authorId": "author-uuid",
+  "categoryIds": ["category-uuid"],
+  "isAvailable": true
+}
+
+### Update a book
+PUT {{baseUrl}}/books/1
+Content-Type: application/json
+
+{
+  "description": "Updated description."
+}
+
+### Delete a book
+DELETE {{baseUrl}}/books/1
+
+### Advanced book search
+GET {{baseUrl}}/books/search?title=pride&authorName=austen&categoryName=classic
+
+#########################################################################
+                CATEGORY ENDPOINTS
+##########################################################################
+
+### Get all categories
+GET {{baseUrl}}/categories
+
+### Get a category by ID
+GET {{baseUrl}}/categories/1
+
+### Create a category
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Classic Literature",
+  "description": "Timeless works of fiction."
+}
+
+### Update a category
+PUT {{baseUrl}}/categories/1
+Content-Type: application/json
+
+{
+  "description": "Updated description."
+}
+
+### Delete a category
+DELETE {{baseUrl}}/categories/1
+
+### Get books in a category
+GET {{baseUrl}}/categories/1/books
+
+#########################################################################
+                BOOK REVIEW ENDPOINTS
+##########################################################################
+
+### Get all book reviews
+GET {{baseUrl}}/book-reviews
+
+### Get a book review by ID
+GET {{baseUrl}}/book-reviews/1
+
+### Create a book review
+POST {{baseUrl}}/book-reviews
+Content-Type: application/json
+
+{
+  "content": "A timeless classic, truly wonderful!",
+  "rating": 5,
+  "userId": "user-uuid",
+  "bookId": "book-uuid"
+}
+
+### Update a book review
+PATCH {{baseUrl}}/book-reviews/1
+Content-Type: application/json
+
+{
+  "content": "Updated review content.",
+  "rating": 4
+}
+
+### Delete a book review
+DELETE {{baseUrl}}/book-reviews/1
+
+### Add a review to a book
+POST {{baseUrl}}/books/1/reviews
+Content-Type: application/json
+
+{
+  "content": "A must-read for everyone.",
+  "rating": 4
+}
