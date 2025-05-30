@@ -1,3 +1,47 @@
 @baseUrl = http://127.0.0.1:5000
 
-GET {{baseUrl}}/users
+# USERS
+GET    {{baseUrl}}/users
+GET    {{baseUrl}}/users/:id
+POST   {{baseUrl}}/users
+PUT    {{baseUrl}}/users/:id
+DELETE {{baseUrl}}/users/:id
+
+# PROFILES
+GET    {{baseUrl}}/profiles
+GET    {{baseUrl}}/profiles/:id
+POST   {{baseUrl}}/profiles
+PATCH  {{baseUrl}}/profiles/:id
+DELETE {{baseUrl}}/profiles/:id
+
+# AUTHORS
+GET    {{baseUrl}}/authors
+GET    {{baseUrl}}/authors/:id
+POST   {{baseUrl}}/authors
+PUT    {{baseUrl}}/authors/:id
+DELETE {{baseUrl}}/authors/:id
+GET    {{baseUrl}}/authors/:id/books
+
+# BOOKS
+GET    {{baseUrl}}/books
+GET    {{baseUrl}}/books/:id
+POST   {{baseUrl}}/books
+PUT    {{baseUrl}}/books/:id
+DELETE {{baseUrl}}/books/:id
+GET    {{baseUrl}}/books/search?title=&authorName=&categoryName=
+
+# CATEGORIES
+GET    {{baseUrl}}/categories
+GET    {{baseUrl}}/categories/:id
+POST   {{baseUrl}}/categories
+PUT    {{baseUrl}}/categories/:id
+DELETE {{baseUrl}}/categories/:id
+GET    {{baseUrl}}/categories/:id/books
+
+# BOOK REVIEWS
+GET    {{baseUrl}}/book-reviews
+GET    {{baseUrl}}/book-reviews/:id
+POST   {{baseUrl}}/book-reviews
+PATCH  {{baseUrl}}/book-reviews/:id
+DELETE {{baseUrl}}/book-reviews/:id
+POST   {{baseUrl}}/books/:bookId/reviews

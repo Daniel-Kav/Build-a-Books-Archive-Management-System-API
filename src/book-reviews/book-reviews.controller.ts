@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, ParseUUIDPipe } from '@nestjs/common';
 import { BookReviewsService } from './book-reviews.service';
 import { CreateBookReviewDto } from './dto/create-book-review.dto';
 import { UpdateBookReviewDto } from './dto/update-book-review.dto';
@@ -30,5 +30,15 @@ export class BookReviewsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookReviewsService.remove(+id);
+  }
+
+  @Post('books/:bookId/reviews')
+  @HttpCode(HttpStatus.CREATED)
+  async addReviewToBook(
+    @Param('bookId', ParseUUIDPipe) bookId: string,
+    @Body() createBookReviewDto: CreateBookReviewDto,
+  ) {
+    const tempUserId = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+    return this.bookReviewsService.addReview(bookId, tempUserId, createBookReviewDto);
   }
 }
