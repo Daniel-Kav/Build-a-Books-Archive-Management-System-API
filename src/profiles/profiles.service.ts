@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Profile } from './entities/profile.entity';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class ProfilesService {
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
+  constructor(
+    @InjectRepository(Profile)
+    private profilesRepository: Repository<Profile>,
+  ) {}
+
+  async create(createProfileDto: CreateProfileDto): Promise<Profile> {
+    const profile = this.profilesRepository.create(createProfileDto);
+    return this.profilesRepository.save(profile);
   }
 
-  findAll() {
-    return `This action returns all profiles`;
+  async findAll(): Promise<Profile[]> {
+    return this.profilesRepository.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async findOne(id: string): Promise<Profile> {
+    const profile = await this.profilesRepository.findOne({ where: { id }, relations: ['user'] });
+    if (!profile) {
+      throw new NotFoundException(`Profile with ID "${id}" not found`);
+    }
+    return profile;
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+  async update(id: string, updateProfileDto: UpdateProfileDto): Promise<Profile> {
+    const profile = await this.findOne(id);
+    Object.assign(profile, updateProfileDto);
+    return this.profilesRepository.save(profile);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async remove(id: string): Promise<{ deleted: boolean }> {
+    const result = await this.profilesRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Profile with ID "${id}" not found`);
+    }
+    return { deleted: true };
   }
 }
