@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,8 @@ async function bootstrap() {
       enableImplicitConversion: true, // Convert string path/query params to expected types
     },
   }));
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   const host = '0.0.0.0'
   await app.listen(process.env.PORT ?? 3000, host);
